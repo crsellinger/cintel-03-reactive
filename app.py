@@ -7,7 +7,7 @@
 
 import plotly.express as px
 from shiny.express import input, ui
-from shiny import render
+from shiny import render, reactive
 from shinywidgets import render_plotly
 import palmerpenguins
 import seaborn
@@ -69,3 +69,8 @@ with ui.sidebar(open="open",bg="#99ccff",fillable=True):
     ui.input_numeric(id="selected_number_of_bins",label="Select Number of Bins (Plot4)",value=10)
     ui.hr()
     ui.a("Link HERE",href="https://github.com/crsellinger/cintel-02-data",target="_blank")
+
+#Reactive Calculations and effects
+@reactive.calc
+def filtered_data():
+    return penguins_df
