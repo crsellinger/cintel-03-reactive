@@ -18,6 +18,11 @@ penguins_df = palmerpenguins.load_penguins()
 #Page options, specifically title
 ui.page_opts(title="Caleb Sellinger - Module 2: Palmer Penguins Data", fillable=True)
 
+#Reactive Calculations and effects
+@reactive.calc
+def filtered_data():
+    return penguins_df
+    
 #column component
 with ui.layout_columns():
 
@@ -28,6 +33,7 @@ with ui.layout_columns():
         if selected_species:
             filtered = penguins_df[penguins_df["species"].isin(selected_species)]
         return render.DataGrid(filtered)
+        #return render.DataGrid(filtered_data())
 
     #DataTable of penguins data
     @render.data_frame
@@ -36,6 +42,7 @@ with ui.layout_columns():
         if selected_species:
             filtered = penguins_df[penguins_df["species"].isin(selected_species)]
         return render.DataTable(filtered)
+        #return render.DataTable(filtered_data())
 
 #column component
 with ui.layout_columns():
@@ -43,10 +50,16 @@ with ui.layout_columns():
     @render.plot(alt="Seaborn histogram plot")
     def plot3():
         return seaborn.histplot(data=penguins_df,x="species",y="body_mass_g",bins=input.seaborn_bin_count())
+        ##################################################################################################################
+        # code below uses the filtered data function above but does not function currently as it only returns the data set
+        # same for other functions, will update for P3 later
+        ##################################################################################################################
+        #return seaborn.histplot(filtered_data(), x="species",y="body_mass_g")
     
     @render_plotly
     def plot4():
         return px.histogram(data_frame=penguins_df,x="flipper_length_mm",y="body_mass_g",nbins=input.selected_number_of_bins())
+        #return px.histogram(filtered_data(),x="flipper_length_mm",y="body_mass_g")
 
 #Card component for scatter plot
 with ui.card(full_screen=True):
@@ -57,7 +70,8 @@ with ui.card(full_screen=True):
     def plot5():
         island = [input.selected_island()]
         filtered = penguins_df[penguins_df["island"].isin(island)]
-        return px.scatter(filtered,x="flipper_length_mm",y="body_mass_g",color="species",title="Body Mass vs Flipper Length",labels={"body_mass_g":"Body Mass (g)","flipper_length_mm":"Flipper Length (mm)","species":"Species"})
+        return px.scatter(filtered,x="flipper_length_mm",y="body_mass_g",color="species",title="Body Mass vs Flipper Length",labels={"body_mass_g":"Body Mass (g)","f1lipper_length_mm":"Flipper Length (mm)","species":"Species"})
+        #return px.scatter(filtered_data(),x="flipper_length_mm",y="body_mass_g",color="species",title="Body Mass vs Flipper Length",labels={"body_mass_g":"Body Mass (g)","f1lipper_length_mm":"Flipper Length (mm)","species":"Species"})
     
 #Side bar component
 with ui.sidebar(open="open",bg="#99ccff",fillable=True):
@@ -70,7 +84,3 @@ with ui.sidebar(open="open",bg="#99ccff",fillable=True):
     ui.hr()
     ui.a("Link HERE",href="https://github.com/crsellinger/cintel-02-data",target="_blank")
 
-#Reactive Calculations and effects
-@reactive.calc
-def filtered_data():
-    return penguins_df
