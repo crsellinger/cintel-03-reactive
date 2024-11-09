@@ -22,8 +22,14 @@ ui.page_opts(title="Caleb Sellinger - Module 2: Palmer Penguins Data", fillable=
 @reactive.calc
 def filtered_data():
     selected_species = input.selected_species_list()
+    island = [input.selected_island()]
+    
     if selected_species:
         filtered = penguins_df[penguins_df["species"].isin(selected_species)]
+
+    if island:
+        filtered = penguins_df[penguins_df["island"].isin(island)]
+        
     return filtered
     
 #column component
@@ -81,10 +87,14 @@ with ui.card(full_screen=True):
     #Scatter plot for penguins data
     @render_plotly
     def plot5():
-        island = [input.selected_island()]
-        filtered = penguins_df[penguins_df["island"].isin(island)]
-        return px.scatter(filtered,x="flipper_length_mm",y="body_mass_g",color="species",title="Body Mass vs Flipper Length",labels={"body_mass_g":"Body Mass (g)","f1lipper_length_mm":"Flipper Length (mm)","species":"Species"})
-        #return px.scatter(filtered_data(),x="flipper_length_mm",y="body_mass_g",color="species",title="Body Mass vs Flipper Length",labels={"body_mass_g":"Body Mass (g)","f1lipper_length_mm":"Flipper Length (mm)","species":"Species"})
+        #Old Code#
+        ###################################################################################################################################################################################################################################
+        #island = input.selected_island()
+        #filtered = penguins_df[penguins_df["island"].isin(island)]
+        #return px.scatter(filtered,x="flipper_length_mm",y="body_mass_g",color="species",title="Body Mass vs Flipper Length",labels={"body_mass_g":"Body Mass (g)","f1lipper_length_mm":"Flipper Length (mm)","species":"Species"})
+        ###################################################################################################################################################################################################################################
+        
+        return px.scatter(filtered_data(),x="flipper_length_mm",y="body_mass_g",color="species",title="Body Mass vs Flipper Length",labels={"body_mass_g":"Body Mass (g)","f1lipper_length_mm":"Flipper Length (mm)","species":"Species"})
     
 #Side bar component
 with ui.sidebar(open="open",bg="#99ccff",fillable=True):
