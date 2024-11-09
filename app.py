@@ -23,12 +23,16 @@ ui.page_opts(title="Caleb Sellinger - Module 2: Palmer Penguins Data", fillable=
 def filtered_data():
     selected_species = input.selected_species_list()
     island = [input.selected_island()]
+    bins = input.seaborn_bin_count()
     
     if selected_species:
         filtered = penguins_df[penguins_df["species"].isin(selected_species)]
 
     if island:
         filtered = penguins_df[penguins_df["island"].isin(island)]
+
+    #if bins:
+    #    filtered = bins
         
     return filtered
     
@@ -73,7 +77,8 @@ with ui.layout_columns():
 
     @render.plot(alt="Seaborn histogram plot")
     def plot3():
-        return seaborn.histplot(data=penguins_df,x="species",y="body_mass_g",bins=input.seaborn_bin_count())
+        return seaborn.histplot(data=penguins_df,x="species",y="body_mass_g",bins=filtered_data())
+        #return seaborn.histplot(filtered_data(),x="species",y="body_mass_g")
     
     @render_plotly
     def plot4():
@@ -101,8 +106,8 @@ with ui.sidebar(open="open",bg="#99ccff",fillable=True):
     ui.input_dark_mode(mode="light")
     ui.h2("Sidebar")
     ui.input_checkbox_group("selected_species_list","Select Species (Plot 1 & 2)",choices=["Adelie","Gentoo","Chinstrap"],selected=["Adelie","Gentoo","Chinstrap"],inline=False)
-    ui.input_selectize(id="selected_island",label="Select Penguins Island",choices=["Torgersen","Biscoe","Dream"],selected="Dream")
     ui.input_slider("seaborn_bin_count","Seaborn Slider (Plot 3)",0,150,50)
     ui.input_numeric(id="selected_number_of_bins",label="Select Number of Bins (Plot4)",value=10)
+    ui.input_selectize(id="selected_island",label="Select Penguins Island (Plot 5)",choices=["Torgersen","Biscoe","Dream"],selected="Dream")
     ui.hr()
     ui.a("Link HERE",href="https://github.com/crsellinger/cintel-02-data",target="_blank")
