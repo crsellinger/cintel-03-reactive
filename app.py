@@ -18,31 +18,49 @@ penguins_df = palmerpenguins.load_penguins()
 #Page options, specifically title
 ui.page_opts(title="Caleb Sellinger - Module 2: Palmer Penguins Data", fillable=True)
 
-#Reactive Calculations and effects
+#Reactive Calculations
 @reactive.calc
 def filtered_data():
-    return penguins_df
+    selected_species = input.selected_species_list()
+    if selected_species:
+        filtered = penguins_df[penguins_df["species"].isin(selected_species)]
+    return filtered
     
 #column component
 with ui.layout_columns():
+    #card componenet for Data Table
+    with ui.card(full_screen=True):
+        ui.h2("Penguins Data Table")
+        #Data Table
+        @render.data_frame
+        def penguins_datatable():
+            return render.DataTable(filtered_data())
+
+    #Card component for Data Grid
+    with ui.card(full_screen=True):
+        ui.h2("Penguin Data Grid")
+        #Data Grid
+        @render.data_frame
+        def penguins_datagrid():
+            return render.DataGrid(filtered_data())
 
     #DataGrid for penguins data, 
-    @render.data_frame
-    def plot1():
-        selected_species = input.selected_species_list()
-        if selected_species:
-            filtered = penguins_df[penguins_df["species"].isin(selected_species)]
-        return render.DataGrid(filtered)
-        #return render.DataGrid(filtered_data())
+    #@render.data_frame
+    #def plot1():
+    #    selected_species = input.selected_species_list()
+    #    if selected_species:
+    #        filtered = penguins_df[penguins_df["species"].isin(selected_species)]
+    #    return render.DataGrid(filtered)
+    #    #return render.DataGrid(filtered_data())
 
     #DataTable of penguins data
-    @render.data_frame
-    def plot2():
-        selected_species = input.selected_species_list()
-        if selected_species:
-            filtered = penguins_df[penguins_df["species"].isin(selected_species)]
-        return render.DataTable(filtered)
-        #return render.DataTable(filtered_data())
+    #@render.data_frame
+    #def plot2():
+    #    selected_species = input.selected_species_list()
+    #    if selected_species:
+    #        filtered = penguins_df[penguins_df["species"].isin(selected_species)]
+    #    return render.DataTable(filtered)
+    #    #return render.DataTable(filtered_data())
 
 #column component
 with ui.layout_columns():
@@ -50,11 +68,6 @@ with ui.layout_columns():
     @render.plot(alt="Seaborn histogram plot")
     def plot3():
         return seaborn.histplot(data=penguins_df,x="species",y="body_mass_g",bins=input.seaborn_bin_count())
-        ##################################################################################################################
-        # code below uses the filtered data function above but does not function currently as it only returns the data set
-        # same for other functions, will update for P3 later
-        ##################################################################################################################
-        #return seaborn.histplot(filtered_data(), x="species",y="body_mass_g")
     
     @render_plotly
     def plot4():
@@ -83,4 +96,3 @@ with ui.sidebar(open="open",bg="#99ccff",fillable=True):
     ui.input_numeric(id="selected_number_of_bins",label="Select Number of Bins (Plot4)",value=10)
     ui.hr()
     ui.a("Link HERE",href="https://github.com/crsellinger/cintel-02-data",target="_blank")
-
