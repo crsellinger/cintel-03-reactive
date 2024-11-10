@@ -30,9 +30,6 @@ def filtered_data():
 
     if island:
         filtered = penguins_df[penguins_df["island"].isin(island)]
-
-    #if bins:
-    #    filtered = bins
         
     return filtered
     
@@ -77,13 +74,11 @@ with ui.layout_columns():
 
     @render.plot(alt="Seaborn histogram plot")
     def plot3():
-        return seaborn.histplot(data=penguins_df,x="species",y="body_mass_g",bins=filtered_data())
-        #return seaborn.histplot(filtered_data(),x="species",y="body_mass_g")
+        return seaborn.histplot(data=penguins_df,x="species",y="body_mass_g",bins=input.seaborn_bin_count())
     
     @render_plotly
     def plot4():
         return px.histogram(data_frame=penguins_df,x="flipper_length_mm",y="body_mass_g",nbins=input.selected_number_of_bins())
-        #return px.histogram(filtered_data(),x="flipper_length_mm",y="body_mass_g")
 
 #Card component for scatter plot
 with ui.card(full_screen=True):
