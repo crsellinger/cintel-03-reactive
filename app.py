@@ -28,7 +28,7 @@ def filtered_data():
     if selected_species:
         filtered = penguins_df[penguins_df["species"].isin(selected_species)]
 
-    if island:
+    elif island:
         filtered = penguins_df[penguins_df["island"].isin(island)]
         
     return filtered
